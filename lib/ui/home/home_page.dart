@@ -115,13 +115,13 @@ class HomePage extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 4),
-                      Text(
-                        post.createdAt.toIso8601String(),
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey,
-                        ),
-                      ),
+                      // Text(
+                      //   post.createdAt.toIso8601String(),
+                      //   style: TextStyle(
+                      //     fontSize: 12,
+                      //     color: Colors.grey,
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),

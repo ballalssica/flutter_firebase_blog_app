@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_firebase_blog_app/data/model/post.dart';
 
 class PostRepository {
@@ -16,6 +15,7 @@ class PostRepository {
       return docs.map(
         (doc) {
           final map = doc.data();
+          print(map.toString());
           final newMap = {
             'id': doc.id,
             ...map,
@@ -50,6 +50,7 @@ class PostRepository {
         'content': content,
         'writer': writer,
         'imageUrl': imageUrl,
+        // 'createdAt': DateTime.now().toIso8601String(),
       });
       return true;
     } catch (e) {

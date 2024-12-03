@@ -4,7 +4,7 @@ class Post {
   String content;
   String writer;
   String imageUrl;
-  DateTime createdAt;
+  // DateTime createdAt;
 
   Post({
     required this.id,
@@ -12,19 +12,20 @@ class Post {
     required this.content,
     required this.writer,
     required this.imageUrl,
-    required this.createdAt,
+    // required this.createdAt,
   });
 
   //1. formJson 네임드 생성자 만들기
   Post.formJson(Map<String, dynamic> map)
       : this(
-          id: map['id'],
-          title: map['title'],
-          content: map['content'],
-          writer: map['writer'],
-          imageUrl: map['imageUrl'],
-          createdAt: DateTime.parse(map['createdAt']),
+          id: map['id'] as String,
+          title: map['title'] as String,
+          content: map['content'] as String,
+          writer: map['writer'] as String,
+          imageUrl: map['imageUrl'] as String,
+          // createdAt: DateTime.parse(map['createdAt']), // 문자열을 DateTime으로 변환
         );
+
   //2. toJson 메서드 만들기
   Map<String, dynamic> toJson() {
     return {
@@ -33,7 +34,7 @@ class Post {
       'content': content,
       'writer': writer,
       'imageUrl': imageUrl,
-      'createdAt': createdAt.toIso8601String(),
+      // 'createdAt': createdAt.toIso8601String(),
     };
   }
 }
