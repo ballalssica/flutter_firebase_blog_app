@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class WritePage extends StatefulWidget {
   @override
@@ -101,11 +102,21 @@ class _WritePageState extends State<WritePage> {
                 ),
                 Align(
                   alignment: Alignment.centerRight,
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    color: Colors.grey,
-                    child: Icon(Icons.image),
+                  child: GestureDetector(
+                    onTap: () async {
+                      // 1. 이미지 피커 객체 생성
+                      ImagePicker imagePicker = ImagePicker();
+                      // 2. 이미지 피커 객체의 pickImage라는 메서드 호출
+                      XFile? xFile = await imagePicker.pickImage(
+                          source: ImageSource.gallery);
+                      print('경로: ${xFile?.path}');
+                    },
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      color: Colors.grey,
+                      child: Icon(Icons.image),
+                    ),
                   ),
                 )
               ],
