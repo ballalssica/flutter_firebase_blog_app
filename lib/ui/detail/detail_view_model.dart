@@ -11,21 +11,32 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class DetailViewModel extends AutoDisposeFamilyNotifier<Post, Post> {
   @override
   Post build(Post arg) {
+    listenStream();
     return arg;
   }
 
-final postRepository = PostRepository();
+  final postRepository = PostRepository();
 
   Future<bool> deletePost() async {
-    
     return await postRepository.delete(arg.id);
   }
 
-  void listenStream () {
-postRepository.postLostStream(id)
+  void listenStream() {
+    final stream = postRepository.postStream(arg.id);
+    final streamSub = stream.listen(
+      (data) {
+        if (data != null) {
+          state = data;
+        }
+      },
+    );
+    ref.onDispose(
+      () {
+        streamSub.cancel();
+      },
+    );
   }
- }
-
+}
 
 // 3. 뷰모델 관리자 만들기
 final DetailViewModelProvider =

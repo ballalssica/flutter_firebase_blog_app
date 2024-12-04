@@ -149,8 +149,22 @@ class PostRepository {
     return newStream;
   }
 
-  void postStream() {
+  Stream<Post?> postStream(String id) {
     final firestore = FirebaseFirestore.instance;
     final collectionRef = firestore.collection('posts');
+    final docRef = collectionRef.doc(id);
+    final stream = docRef.snapshots();
+    final newStream = stream.map(
+      (e) {
+        if (e.data() == null) {
+          return null;
+        }
+        return Post.formJson({
+          'id': e.id,
+          ...e.data()!,
+        });
+      },
+    );
+    return newStream;
   }
 }
