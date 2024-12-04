@@ -39,7 +39,6 @@ class _WritePageState extends ConsumerState<WritePage> {
   @override
   Widget build(BuildContext context) {
     final writeState = ref.watch(writeViewModelProvider(widget.post));
-    final vm = ref.read(writeViewModelProvider(widget.post).notifier);
     if (writeState.isWriting) {
       return Scaffold(
         appBar: AppBar(),
@@ -58,6 +57,8 @@ class _WritePageState extends ConsumerState<WritePage> {
               onTap: () async {
                 final result = formKey.currentState?.validate() ?? false;
                 if (result) {
+                  final vm =
+                      ref.read(writeViewModelProvider(widget.post).notifier);
                   final insertResult = await vm.insert(
                     writer: writeController.text,
                     title: titleController.text,
@@ -142,21 +143,13 @@ class _WritePageState extends ConsumerState<WritePage> {
                       XFile? xFile = await imagePicker.pickImage(
                           source: ImageSource.gallery);
                       print('경로: ${xFile?.path}');
-                      if (xFile != null) {
-                        vm.uploadImage(xFile);
-                      }
                     },
-                    child: writeState.imageUrl == null
-                        ? Container(
-                            width: 100,
-                            height: 100,
-                            color: Colors.grey,
-                            child: Icon(Icons.image),
-                          )
-                        : SizedBox(
-                            height: 100,
-                            child: Image.network(writeState.imageUrl!),
-                          ),
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      color: Colors.grey,
+                      child: Icon(Icons.image),
+                    ),
                   ),
                 )
               ],
