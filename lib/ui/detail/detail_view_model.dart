@@ -14,11 +14,18 @@ class DetailViewModel extends AutoDisposeFamilyNotifier<Post, Post> {
     return arg;
   }
 
+final postRepository = PostRepository();
+
   Future<bool> deletePost() async {
-    final postRepository = PostRepository();
+    
     return await postRepository.delete(arg.id);
   }
-}
+
+  void listenStream () {
+postRepository.postLostStream(id)
+  }
+ }
+
 
 // 3. 뷰모델 관리자 만들기
 final DetailViewModelProvider =

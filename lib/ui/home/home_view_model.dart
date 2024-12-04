@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_firebase_blog_app/data/model/post.dart';
 import 'package:flutter_firebase_blog_app/data/repository/post_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,11 +16,23 @@ class HomeViewModel extends Notifier<List<Post>> {
 
   void getAllPosts() async {
     final postRepo = PostRepository();
-    final posts = await postRepo.getAll();
+    // final posts = await postRepo.getAll();
+    // state = posts ?? [];
+    final stream = postRepo.postLostStream();
+    final StreamSubscription = stream.listen(
+      (posts) {
+        state = posts;
+      },
+    );
 
-    print('로드된 데이터: $posts');
-
-    state = posts ?? [];
+    /// 이 뷰모델이 없어질 때 넘겨준 함수 호출
+    ref.onDispose(
+      () {
+        // 구독하고 있는 Stream의 구독을 끊어주어야 메모리에서 안전하게 제거
+        // cancel 메서드 호출!
+        StreamSubscription.cancel();
+      },
+    );
   }
 }
 

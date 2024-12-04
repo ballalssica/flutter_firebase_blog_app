@@ -16,9 +16,15 @@ class WritePage extends ConsumerStatefulWidget {
 
 class _WritePageState extends ConsumerState<WritePage> {
   // 제목, 작성자, 내용
-  TextEditingController writeController = TextEditingController();
-  TextEditingController titleController = TextEditingController();
-  TextEditingController contentController = TextEditingController();
+  late TextEditingController writeController = TextEditingController(
+    text: widget.post?.writer ?? '',
+  );
+  late TextEditingController titleController = TextEditingController(
+    text: widget.post?.title ?? '',
+  );
+  late TextEditingController contentController = TextEditingController(
+    text: widget.post?.content ?? '',
+  );
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -59,10 +65,7 @@ class _WritePageState extends ConsumerState<WritePage> {
                     content: contentController.text,
                   );
                   if (insertResult) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
+                    Navigator.pop(context);
                   }
                 }
               },
