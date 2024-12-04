@@ -1,10 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Post {
   String id;
   String title;
   String content;
   String writer;
   String imageUrl;
-  // DateTime createdAt;
+  DateTime createdAt;
 
   Post({
     required this.id,
@@ -12,7 +14,7 @@ class Post {
     required this.content,
     required this.writer,
     required this.imageUrl,
-    // required this.createdAt,
+    required this.createdAt,
   });
 
   //1. formJson 네임드 생성자 만들기
@@ -23,7 +25,8 @@ class Post {
           content: map['content'] as String,
           writer: map['writer'] as String,
           imageUrl: map['imageUrl'] as String,
-          // createdAt: DateTime.parse(map['createdAt']), // 문자열을 DateTime으로 변환
+          createdAt: (map['createdAt'] as Timestamp)
+              .toDate(), // Firestore Timestamp 변환
         );
 
   //2. toJson 메서드 만들기
@@ -34,7 +37,7 @@ class Post {
       'content': content,
       'writer': writer,
       'imageUrl': imageUrl,
-      // 'createdAt': createdAt.toIso8601String(),
+      'createdAt': createdAt.toIso8601String(),
     };
   }
 }

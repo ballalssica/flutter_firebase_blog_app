@@ -50,6 +50,7 @@ class PostRepository {
         'content': content,
         'writer': writer,
         'imageUrl': imageUrl,
+        'createdAt': FieldValue.serverTimestamp(),
         // 'createdAt': DateTime.now().toIso8601String(),
       });
       return true;
@@ -134,7 +135,8 @@ class PostRepository {
 
   Stream<List<Post>> postLostStream() {
     final firestore = FirebaseFirestore.instance;
-    final collectionRef = firestore.collection('posts');
+    final collectionRef =
+        firestore.collection('posts').orderBy('createdAt', descending: true);
     final stream = collectionRef.snapshots();
     final newStream = stream.map(
       (event) {
