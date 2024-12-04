@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_blog_app/data/model/post.dart';
+import 'package:flutter_firebase_blog_app/ui/home/home_page.dart';
+import 'package:flutter_firebase_blog_app/ui/write/widgets/write_view_model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
-class WritePage extends StatefulWidget {
+class WritePage extends ConsumerStatefulWidget {
+  WritePage(this.post);
+
+  Post? post;
+
   @override
-  State<WritePage> createState() => _WritePageState();
+  ConsumerState<WritePage> createState() => _WritePageState();
 }
 
-class _WritePageState extends State<WritePage> {
+class _WritePageState extends ConsumerState<WritePage> {
   // 제목, 작성자, 내용
   TextEditingController writeController = TextEditingController();
   TextEditingController titleController = TextEditingController();
@@ -24,6 +32,14 @@ class _WritePageState extends State<WritePage> {
 
   @override
   Widget build(BuildContext context) {
+    final writeState = ref.watch(writeViewModelProvider(widget.post));
+    if (writeState.isWriting) {
+      return Scaffold(
+        appBar: AppBar(),
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -32,9 +48,23 @@ class _WritePageState extends State<WritePage> {
         appBar: AppBar(
           actions: [
             GestureDetector(
-              onTap: () {
-                print('완료클릭');
+              onTap: () async {
                 final result = formKey.currentState?.validate() ?? false;
+                if (result) {
+                  final vm =
+                      ref.read(writeViewModelProvider(widget.post).notifier);
+                  final insertResult = await vm.insert(
+                    writer: writeController.text,
+                    title: titleController.text,
+                    content: contentController.text,
+                  );
+                  if (insertResult) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                    );
+                  }
+                }
               },
               child: Container(
                 width: 50,

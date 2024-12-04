@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(
             builder: (context) {
-              return WritePage();
+              return WritePage(null);
             },
           ));
         },
@@ -64,7 +64,7 @@ class HomePage extends StatelessWidget {
         onTap: () {
           Navigator.push(context, MaterialPageRoute(
             builder: (context) {
-              return DetailPage();
+              return DetailPage(post);
             },
           ));
         },
